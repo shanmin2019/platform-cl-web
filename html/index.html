@@ -1,0 +1,319 @@
+<html class="indexHtml" ang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>后台管理</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+</head>
+
+<body class="indexBody">
+<input name="projectId" value="4" type="hidden">
+<div class="con-wripper">
+    <div class="con-top clearfix">
+        <div class="left-top f-l">
+            <div class="logo-top f-l">
+            </div>
+            <div class="modname-top f-l">API RUNNER</div>
+        </div>
+        <div class="right-top f-r">
+            <div class="srch-top f-l">
+                <input class="ipt-top" placeholder="搜索分组/项目/接口" type="text">
+            </div>
+            <div class="handle-top f-l">
+                <i class="icon-top icon-collect"></i>
+                <i class="icon-top icon-plus"></i>
+                <i class="icon-top icon-doubt"></i>
+            </div>
+            <div class="ctr-top f-l">
+                <div class="btn_stretch">
+                    <a class="header-top"></a>
+                    <i class="icon-arrow"></i>
+                </div>
+                <ul class="ctrlist-top">
+                    <li class="pctr-top">
+                        <a href="userSet.html">个人中心</a>
+                    </li>
+                    <li class="quit-top">
+                        <a href="javascript:logout()">退出</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="nav-interlist">
+        <ul class="clearfix">
+            <li class="active"><a href="#">接口</a></li>
+            <li><a href="projectSet.html">项目设置</a></li>
+            <li><a href="projectList.html">选择项目</a></li>
+            <li>
+                <a href="#">敬请期待</a>
+            </li>
+        </ul>
+    </div>
+    <div class="main-interlist com-module clearfix">
+        <div class="left-interlist f-l" style="height: 297px;">
+            <div class="tab-interlist">
+                <div class="tabtype-interlist">
+                    <ul class="clearfix">
+                        <li class="active"><a href="index.html">接口列表</a></li>
+                        <li><a href="index2.html">测试集合</a></li>
+                    </ul>
+                </div>
+                <div class="srchbox-interlist clearfix">
+                    <input placeholder="搜索接口" class="input-com f-l" type="text">
+                    <a href="javascript:;" class="btn-addfl btn-com f-r" id="addfl">添加分类</a>
+                    <!-- <input placeholder="用户名" class="input-com" type="text">
+                    <input placeholder="密码" class="input-com" type="text">
+                    <a href="javascript:;" class="btn-addfl btn-com f-r" id="addfl">登录</a> -->
+                </div>
+            </div>
+            <div class="list-interlist" id="listInter">
+                <ul class="type_menu">
+                    <li class="active">
+                        <div class="menu-interlist">
+                            <a href="/lemon/html/apiList.html" target="rightIframe" @click="goAll()">
+                                <i class="icon-file"></i>
+                                <span>全部接口</span>
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="" v-for="apiclassification in info">
+                        <div class="menu-interlist">
+                            <a href="/lemon/html/apiList.html" target="rightIframe" @click="goTo(apiclassification.id)">
+                                <i class="icon-file"></i>
+                                <span>{{apiclassification.name}}</span>
+                                <div class="hanmenu-interlist active">
+                                    <i class="icon-edit" @click="editclassification(apiclassification.id)"></i>
+                                    <i class="icon-delete" @click="delclassification(apiclassification.id)"></i>
+                                </div>
+                            </a>
+                        </div>
+                        <ul class="tmenu-interlist">
+                            <!-- 加载此分类下的所有接口  -->
+                            <li class="" v-for="api in apiclassification.apis">
+                                <a href="/lemon/html/apiView.html" target="rightIframe" @click="goTo2(api.id)">
+                                    {{api.name}}
+                                    <div class="hantmenu-interlist active">
+                                        <i class="icon-badge">{{api.method}}</i>
+                                        <i class="icon-delete"></i>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+        <iframe class="rightIframe f-l" name="rightIframe" src="/lemon/html/apiList.html" scrolling="yes"
+                style="height: 297px;" frameborder="0"></iframe>
+        <!-- <iframe class="rightIframe f-l" name="rightIframe" src="/lemon/html/apiList.html" onload="loadFrame(this);"
+            scrolling="yes" style="height: 297px;" frameborder="0"></iframe> -->
+    </div>
+    <!-- 添加分类窗口 -->
+    <form id="addClassification">
+        <div class="dialog-addinter">
+            <div class="line-addinter form_control clearfix">
+                <label><span>*</span>分类名称：</label>
+                <input placeholder="分类名称" class="required" data-valid="isNonEmpty" data-error="内容不能为空" name="name"
+                       type="text">
+                <span class="valid_message"></span>
+            </div>
+            <div class="line-addinter form_control clearfix describe">
+                <label>描述：</label>
+                <textarea type="text" class="path-addinter" placeholder="描述" name="description"></textarea>
+            </div>
+        </div>
+    </form>
+    <!-- 编辑分类窗口 -->
+    <form id="editClassification" v-for="apiclassification111 in info">
+        <div class="dialog-addinter">
+            <div class="line-addinter form_control clearfix">
+                <label><span>*</span>分类名称：</label>
+                <input placeholder="分类名称" class="required" data-valid="isNonEmpty" data-error="内容不能为空" name="name"
+                       type="text">
+                <span class="valid_message"></span>
+            </div>
+            <div class="line-addinter form_control clearfix describe">
+                <label>描述：</label>
+                <textarea type="text" class="path-addinter" placeholder="描述" name="description"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/lemon/js/alert.js"></script>
+<!-- <script type="text/javascript" src="/lemon/js/base.js"></script> -->
+<script type="text/javascript" src="/lemon/js/jquery-validate.js"></script>
+<script type="text/javascript" src="/lemon/js/common.js"></script>
+<script type="text/javascript" src="/lemon/js/index.js"></script>
+<script type="text/javascript" src="/lemon/js/apiList.js"></script>
+
+<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+<script src="/lemon/js/vue.js"></script>
+<script src="/lemon/js/axios.min.js"></script>
+<script>
+    var myvue = new Vue({
+        el: "#listInter",
+        data: {
+            info: []
+            // apiClassificationInfo:null
+        },
+        methods: {
+            goAll() {
+                sessionStorage.removeItem("apiClassificationId");
+            },
+            goTo(apiClassificationId) {
+                sessionStorage.setItem("apiClassificationId", apiClassificationId);
+            },
+            goTo2(apiId) {
+                sessionStorage.setItem("apiId", apiId);
+            },
+
+            //删除分类
+            delclassification(id) {
+                let projectId = sessionStorage.getItem("projectId");
+                let url = lemon.config.global.admin + "/apiClassification/deleteApiClassification?apiClassificationId=" + id;
+                let sessionId = $.cookie("sessionId");
+                if (confirm("真的要删除吗？")) {
+                    axios.get(url, {
+                        headers: {"Authorization": sessionId},
+                        // params:{
+                        // "id":id
+                        // }
+                    }).then(response => {
+                        let result = response.data;
+                        if (result.status == 1 && result.message == "删除成功") {
+                            console.log(result.data);
+                            alert(result.message);
+                            window.location.reload();
+                        } else {
+                            // location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                            alert("删除完成异常");
+                        }
+                    })
+                } else {
+                    alert("删除错误抛出")
+                }
+
+            },
+            //更新模块分类
+            editclassification(id) {
+                //先要查询，模块的详情；然后在进行修改
+                let projectId = sessionStorage.getItem("projectId");
+                //模块ID模块信息查询
+                let urlapi = lemon.config.global.admin + "/apiClassification/" + id;
+                let sessionId = $.cookie("sessionId");
+                //查询分类接口数据
+                axios.get(urlapi, {
+                    headers: {"Authorization": sessionId},
+                    // params:{
+                    // "id":id
+                    // }
+                }).then(response => {
+                    let result = response.data;
+                    if (result.status == 1 && result.data != null) {
+                        //在jqueryAlert执行前获取并回填到框内
+                        $('#editClassification .required').val(result.data.name);
+                        $('#editClassification .path-addinter').val(result.data.description);
+                        // this.apiClassificationInfo = result.data;
+                        // window.location.reload();
+                        var dialog = jqueryAlert({
+                            'style': 'pc',
+                            'title': '编辑分类',
+                            'content': $('#editClassification'), // $("#alert-blockquote")
+                            'modal': true,
+                            'contentTextAlign': 'left',
+                            'width': '520px',
+                            'animateType': 'linear',
+                            'end': function () {
+                                console.log(1111);
+                            },
+                            'buttons': {
+                                '取消': function () {
+                                    dialog.close();
+                                },
+                                '提交': function () {
+                                    var projectId = sessionStorage.getItem("projectId", projectId);
+                                    // $("[name='projectId']").val();
+                                    var ifViladate = true;
+                                    var $form = $('.pcAlert').last().find(
+                                        '#editClassification');
+                                    ifViladate = $form.validate('submitValidate');
+                                    if (!ifViladate)
+                                        return;
+                                    $.ajax({
+                                        url: lemon.config.global.admin
+                                            + "/apiClassification/updateApiClassification",
+                                        headers: {"Authorization": $.cookie("sessionId")},
+                                        data: $form.serialize() + '&id=' + id,
+                                        type: 'post',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (ret) {
+                                            if (ret.status == "1") {
+                                                dialog.close();
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        })
+                    } else {
+                        location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                    }
+                })
+
+            }
+        },
+        created() {
+            let projectId = sessionStorage.getItem("projectId");
+            let url = lemon.config.global.admin + "/apiClassification/toIndex";
+            let sessionId = $.cookie("sessionId");
+            axios.get(url, {
+                headers: {"Authorization": sessionId},
+                params: {"projectId": projectId, "tab": 1}
+            }).then(response => {
+                let result = response.data;
+                if (result.status == 1 && result.data != null) {
+                    // console.log(result.data);
+                    this.info = result.data;
+                } else {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            })
+        }
+
+    })
+</script>
+<script type="text/javascript" src="/lemon/js/base.js"></script>
+<script>
+    function logout() {
+        let sessionId = $.cookie("sessionId");
+        $.ajax({
+            headers: {"Authorization": sessionId},
+            url: lemon.config.global.admin + "/user/logout",
+            type: "GET",
+            success: function (ret) {
+                if (ret.status == 1 && ret.message == "账号未登录") {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            }
+        })
+    }
+</script>
+</body>
+
+</html>

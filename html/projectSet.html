@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html class="indexHtml" ang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>后台管理</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="stylesheet" type="text/css" href="/lemon/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+
+</head>
+
+<body class="indexBody">
+<div class="con-wripper">
+    <div class="con-top clearfix">
+        <div class="left-top f-l">
+            <div class="logo-top f-l">
+            </div>
+            <div class="modname-top f-l">API RUNNER</div>
+        </div>
+        <div class="right-top f-r">
+            <div class="srch-top f-l">
+                <input type="text" class="ipt-top" placeholder="搜索分组/项目/接口"/>
+            </div>
+            <div class="handle-top f-l">
+                <i class="icon-top icon-collect"></i>
+                <i class="icon-top icon-plus"></i>
+                <i class="icon-top icon-doubt"></i>
+            </div>
+            <div class="ctr-top f-l">
+                <div class="btn_stretch">
+                    <a class="header-top"></a>
+                    <i class="icon-arrow"></i>
+                </div>
+                <ul class="ctrlist-top">
+                    <li class="pctr-top">
+                        <a href="#">个人中心</a>
+                    </li>
+                    <li class="quit-top">
+                        <a href="javascript:logout()">退出</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="nav-interlist">
+        <ul class="clearfix">
+            <li><a href="index.html">接口</a></li>
+
+            <li class="active"><a href="projectSet.html">项目设置</a></li>  <!--该处是项目设置的HTML-->
+        </ul>
+    </div>
+    <div class="main-interlist com-module clearfix mr24">
+        <div class="item_tab">
+            <a class="tab_span" href="javascript:;">项目配置</a>
+            <a href="javascript:;" class="btn-addhost btn-com f-r">添加host</a>
+        </div>
+
+        <div class="right-interlist item_main">
+            <div class="desc-interlist">
+                <div class="item_body btm-border">
+                    <a class="item_single2">
+                        <span class="item_ic"></span>
+                    </a>
+                    <span class="item2_title">项目中心</span>
+                </div>
+            </div>
+            <form id="myForm">
+                <div class="form_box">
+                    <div class="line-addinter form_control clearfix">
+                        <label><span>*</span>项目名称：</label>
+                        <input type="text" placeholder="项目名称" class="required" data-valid="isNonEmpty"
+                               data-error="内容不能为空" name="name" :value="projectInfo.name">
+                        <!--name="name"  该处的name 与 Project中的属性值要对上也就是键值对
+                            :value="projectInfo.name"   是Vue中的写法，单向绑定
+                        该处用法是将name中的值进行单向绑定进行展示，该处的值是后端返回的值，也就是将值赋值给属性
+                        -->
+                        <span class="valid_message"></span>
+                    </div>
+
+
+                    <div class="line-addinter form_control clearfix">
+                        <label>不同环境host：</label>
+                        <!-- <select name="projecthostId"></select> -->
+                        <!-- 判断返回值是否相等，默认选中 -->
+                        <!-- <select style="width:10%;" name="method" disabled="disabled">
+                            <option value="get" :selected="api.method=='get'">GET</option>
+                        </select> -->
+
+                        <select @change="changeProduct($event,projecthostList)" name="id">
+                            <option v-for="(hosts,index) in projectInfo.projecthostList" :key="index"
+                                    :value="hosts.id" :selected="projectInfo.host==hosts.hostName">{{hosts.hostName}}
+                            </option>
+                        </select>
+
+
+                    </div>
+
+
+                    <div class="line-addinter form_control clearfix">
+                        <label>接口基本路径<i class="icon-doubt"></i>：</label>
+                        <!-- <input type="text" placeholder="..." class="required" data-valid="isNonEmpty" name="host"
+                            data-error="内容不能为空" :value="projectInfo.host"> -->
+                        <input type="text" placeholder="..." class="required" data-valid="isNonEmpty" name="host"
+                               data-error="内容不能为空"
+                               :value="this.projecthostName==''?projectInfo.host:this.projecthostName">
+
+                        <!-- 绑定属性 -->
+                        <span class="valid_message"></span>
+                    </div>
+                    <div class="line-addinter form_control clearfix describe">
+                        <label>环境描述：</label>
+                        <textarea type="text" class="path-addinter required" placeholder="环境描述" name="description"
+                                  class="required" data-valid="isNonEmpty"
+                                  data-error="内容不能为空">{{this.description==''?projectInfo.description:this.description}}</textarea>
+                        <!--</textarea>没有属性所以直接放进来了--->
+                        <!-- 插值表达式放内容 -->
+                        <span class="valid_message"></span>
+                    </div>
+                </div>
+                <div class="btn_save"><a href="javascript:;">保 存</a></div>
+            </form>
+            <div class="del_box">
+                <div class="del_font">
+                    <h4>删除项目</h4>
+                    <p>项目一旦删除，将无法恢复数据，请谨慎操作！<br> 只有组长和管理员有权限删除项目。</p>
+                </div>
+                <a class="del_btn" href="javascript:;">删 除</a>
+            </div>
+        </div>
+    </div>
+    <div id="whether_del">
+        <div class="dialog-addinter">
+            项目一旦删除，将无法恢复数据，请谨慎操作！<br> 只有组长和管理员有权限删除项目。
+        </div>
+    </div>
+    <!-- 添加项目弹框 -->
+    <form id="addForm2">
+        <div class="dialog-addinter">
+            <div class="line-addinter form_control clearfix">
+                <label>主机地址</label>
+                <input type="text" class="path-addinter required" data-valid="isNonEmpty" data-error="内容不能为空"
+                       placeholder="主机地址(域名或ip)" name="hostName">
+                <span class="valid_message"></span>
+            </div>
+            <div class="line-addinter form_control clearfix describe">
+                <label>环境描述：</label>
+                <textarea type="text" class="path-addinter" placeholder="环境描述" name="description"></textarea>
+                <span class="valid_message"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/lemon/js/alert.js"></script>
+<script type="text/javascript" src="/lemon/js/base.js"></script>
+
+<script type="text/javascript" src="/lemon/js/common.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery-validate.js"></script>
+<script type="text/javascript" src="/lemon/js/interRun.js"></script>
+<script type="text/javascript" src="/lemon/js/interfaceList.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+
+<script src="/lemon/js/vue.js"></script>
+<script src="/lemon/js/axios.min.js"></script>
+<script>
+    var myvue = new Vue({
+        el: ".form_box",
+        data: {
+            projectInfo: {},
+            projecthostList: [],
+            projecthostName: '',
+            description: ''
+        },
+        methods: {
+            //event默认参数
+            changeProduct(event, projecthostList) {
+                this.ProductActive = event.target.value;
+                let projecthostName = '';
+                let description = '';
+                for (hostall in projecthostList) {
+                    if (this.ProductActive == projecthostList[hostall].id) {
+                        projecthostName = projecthostList[hostall].hostName;
+                        description = projecthostList[hostall].description;
+                    }
+                }
+                this.projecthostName = projecthostName;
+                this.description = description
+
+            }
+        },
+
+        created() {
+
+            //添加接口的弹窗
+            var projectId = sessionStorage.getItem("projectId");
+            var urlone = lemon.config.global.rootUrl + "/project/host/showHostListByProject";
+            let url = lemon.config.global.admin + "/project/" + projectId;
+            let sessionId = $.cookie("sessionId");
+            let u_session_id = $.cookie("u_session_id");
+            axios.get(url, {
+                headers: {"Authorization": sessionId},
+            }).then(response => {
+                let result = response.data;
+                if (result.status == 1 && result.data != null) {
+                    this.projectInfo = result.data;
+                    this.projecthostList = result.data.projecthostList;
+                } else {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            })
+        }
+
+    })
+</script>
+<script>
+    $(function () {
+        //高度计算
+        function calcHeight() {
+            var thispage = document.body.clientHeight
+            var itemmain = thispage - 246;
+            $(".item_main").height(itemmain);
+        }
+
+        calcHeight();
+        window.onresize = function () {
+            calcHeight();
+        }
+
+
+        //删除项目
+        $('.del_btn').click(function () {
+            var dialog = jqueryAlert({
+                'style': 'pc',
+                'title': '删除项目',
+                'content': $('#whether_del'),
+                'modal': true,
+                'contentTextAlign': 'left',
+                'width': '620px',
+                'animateType': 'linear',
+                'buttons': {
+                    '取消': function () {
+                        dialog.close();
+                    },
+                    '确定': function () {
+                        var ifViladate = true;
+                        var $form = $('.pcAlert').last().find('#addForm2');
+                        ifViladate = $form.validate('submitValidate');
+                        if (!ifViladate) return;
+                        //删除项目
+                        let projectId = sessionStorage.getItem("projectId");
+                        //异步请求更新
+                        $.ajax({
+                            headers: {"Authorization": $.cookie("sessionId")},
+                            url: lemon.config.global.admin + "/project/deletePorject?projectId=" + projectId,
+                            // 改成delate
+                            type: "GET",
+                            // data: projectId,
+                            async: false,
+                            success: function (ret) {
+                                if (ret.status == 1 && ret.message == "删除成功") {
+                                    alert("删除成功")
+                                    dialog.close();
+                                    location.href = lemon.config.global.htmlUrl + "/html/projectList.html";
+                                } else {
+                                    alert('删除项目失败');
+                                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                                }
+                            }
+                        })
+                    }
+
+
+                }
+            });
+        });
+
+        //更新项目
+        $('.btn_save').click(function () {
+
+            //保存项目
+            let projectId = sessionStorage.getItem("projectId");
+            //异步请求更新
+            $.ajax({
+                headers: {"Authorization": $.cookie("sessionId")},
+                url: lemon.config.global.admin + "/project/" + projectId,
+                data: $("#myForm").serialize(),
+                type: "post",
+                success: function (ret) {
+                    alert("更新成功~")
+                    if (ret.status == 1 && ret.message == "账号未登录") {
+                        location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                    }
+                }
+            });
+        });
+
+    })
+</script>
+<script type="text/javascript" src="/lemon/js/host.js"></script>
+<script>
+    function logout() {
+        let sessionId = $.cookie("sessionId");
+        $.ajax({
+            headers: {"Authorization": sessionId},
+            url: lemon.config.global.admin + "/user/logout",
+            type: "GET",
+            success: function (ret) {
+                if (ret.status == 1 && ret.message == "账号未登录") {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            }
+        })
+    }
+</script>
+</body>
+
+</html>

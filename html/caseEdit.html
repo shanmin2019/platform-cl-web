@@ -1,0 +1,225 @@
+<html ang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>接口运行</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <link rel="stylesheet" href="/lemon/css/index.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+</head>
+<body>
+<form name="caseForm">
+    <div class="right-interlist right-interpre" style="height: 1200px;">
+        <div class="paramlist-interrun">
+            <div class="paramcom-interrun radius4">
+                <div class="paramline-interrun active">
+                    <div class="line-com line-interrun">
+                        <div class="ipt-interrun f-l" style="width:100%">
+                            <input placeholder="参数值" style="width:90%" name="name" :value="caseEditVO.name" type="text">
+                            <span class="inter-link" style="margin: 0px 8px 0px 6px; font-size: 12px;"><a class="text"
+                                                                                                          href="/lemon/api/find?id=2">对应接口</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input :value="caseEditVO.apiId" name="apiId" type="hidden">
+            <input :value="caseEditVO.id" name="id" type="hidden">
+            <input :value="caseEditVO.method" name="method" type="hidden">
+            <input :value="host" name="host" type="hidden">
+            <div class="del-interrun">
+                <div class="envirset-interrun">
+                    <div class="line-interedit line-interrun line-com clearfix">
+                        <select style="width:10%;" disabled="disabled">
+                            <option value="get" :selected="caseEditVO.method=='get'">GET</option>
+                            <option value="post" :selected="caseEditVO.method=='post'">POST</option>
+                            <option value="put" :selected="caseEditVO.method=='put'">PUT</option>
+                            <option value="delete" :selected="caseEditVO.method=='delete'">DELETE</option>
+                            <option value="head" :selected="caseEditVO.method=='head'">HEAD</option>
+                            <option value="option" :selected="caseEditVO.method=='option'">OPTION</option>
+                            <option value="patch" :selected="caseEditVO.method=='patch'">PATCH</option>
+                        </select>
+                        <div class="ipt-interedit f-l" style="width:45%;">
+                            <input class="iptenvir-interrun pointer arrow" :value="host" disabled="disabled"
+                                   type="text">
+                        </div>
+                        <div class="ipt-interedit" style="width:45%;">
+                            <input readonly="readonly" class="disabled" name="url" :value="caseEditVO.url"
+                                   placeholder="接口地址" type="text">
+                        </div>
+                    </div>
+                    <div class="btnbox-interrun f-r">
+                        <a href="javascript:void(0);" class="btn-send btn-com">发送</a>
+                        <a href="javascript:void(0);" id="btnUApi" class="btn-update btn-com">更新</a>
+                    </div>
+                </div>
+                <div class="paramlist-interrun">
+                    <div class="paramcom-interrun radius4">
+                        <div class="paramtit-interrun"><i class="icon-arrow active"></i>Query</div>
+                        <div class="paramline-interrun active" id="queryDiv">
+
+                        </div>
+                    </div>
+                    <div class="paramcom-interrun radius4">
+                        <div class="paramtit-interrun"><i class="icon-arrow active"></i>BODY</div>
+                        <div class="paramline-interrun active" id="bodyDiv">
+
+                        </div>
+                    </div>
+                    <div class="paramcom-interrun radius4">
+                        <div class="paramtit-interrun"><i class="icon-arrow active"></i>HEADERS</div>
+                        <div class="paramline-interrun active" id="headDiv">
+                            <!--
+                                <div class="line-com line-interrun">
+                                <input name="headerParams[0].id" value="6" type="hidden">
+                                <div class="ipt-interrun f-l" style="width:15%">
+                                    <div class="ltipt-interrun">
+                                        <input class=" disabled" readonly="readonly" value="Content-Type" name="headerParams[0].name" type="text">
+                                    </div>
+                                    <div class="equal-interrun f-r">=</div>
+                                    <input class="disabled f-r" disabled="" checked="" type="checkbox">
+                                </div>
+                                <div class="ipt-interrun f-l" style="width:85%">
+                                    <input placeholder="参数值" style="width:100%" name="headerParams[0].value" value="x-www-form-urlencoded" type="text">
+                                    <div class="edit-interrun f-l"></div>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+                    </div>
+                </div>
+                <div class="response-interrun" style="height: 734px;">
+                    <div class="restit-interrun">
+                        <div class="titnav-interrun">Response</div>
+                        <div class="titnav-interrun">Test</div>
+                    </div>
+                    <div class="reslist-interrun" style="height: 683px;">
+                        <div class="comlist-interrun headlist-interrun f-l" style="height: 683px;">
+                            <div class="titlist-interrun">Headers</div>
+                            <div class="txtlist-interrun radius4" style="overflow: auto;height: 640px;"
+                                 name="responseHeader">
+                                <pre></pre>
+                            </div>
+                        </div>
+                        <div class="comlist-interrun bodylist-interrun f-l" style="height: 683px;">
+                            <div class="titlist-interrun">Body</div>
+                            <div class="txtlist-interrun radius4" style="overflow: auto;height: 640px;"
+                                 name="responseData">
+                                <pre></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="testlist-interrun" style="display:none">
+                        <div class="comlist-interrun headlist-interrun f-l">
+                            <div class="titlist-interrun">jsonPath表达式</div>
+                            <textarea name="caseTestRule.expression" id="" class="remark-interedit"></textarea>
+                        </div>
+                        <div class="comlist-interrun bodylist-interrun f-l">
+                            <div class="titlist-interrun">期望值</div>
+                            <textarea name="caseTestRule.expected" id="" class="remark-interedit"></textarea>
+                        </div>
+                    </div> -->
+                    <div class="testlist-interrun" style="display: none">
+                        <div class="reqpline-interedit linebox-interedit">
+                            <a href="javascript:void(0)" class="btn-com" id="addRule"
+                               style="margin-top: 10px;margin-left: 10px;">添加数据校验规则</a>
+
+                            <div class="line-interedit line-com" v-for="(testRule,index) in caseEditVO.testRules">
+                                <input type="hidden" :name=`testRules[${index}].id` :value="testRule.id">
+                                <input type="hidden" :name=`testRules[${index}].caseId` :value="testRule.caseId">
+                                <input placeholder="jsonpath表达式" :name=`testRules[${index}].expression`
+                                       :value="testRule.expression" style="width:40%;margin-left:5px" type="text">
+                                <select :name=`testRules[${index}].operator` id="" style="width:10%;margin-left:10px">
+                                    <option value="=" :selected="testRule.operator=='='">=</option>
+                                    <option value="contains" :selected="testRule.operator=='contains'">contains</option>
+                                </select>
+                                <input placeholder="期望值" :name=`testRules[${index}].expected` :value="testRule.expected"
+                                       style="width:30%;margin-left:5px" type="text">
+                                <i class="icon icon-delete f-l"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/lemon/js/alert.js"></script>
+<script type="text/javascript" src="/lemon/js/base.js"></script>
+<script type="text/javascript" src="/lemon/js/common.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery-validate.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+<script src="/lemon/js/vue.js"></script>
+<script src="/lemon/js/axios.min.js"></script>
+<script>
+    var myvue = new Vue({
+        el: ".right-interlist",
+        data: {
+            caseEditVO: {},
+            host: ""
+        },
+        methods: {
+
+            showCase() {
+                var caseId = sessionStorage.getItem("caseId");
+                var url = lemon.config.global.rootUrl + "/cases/findCaseEditVO";
+                //下拉加载分类数据
+                axios.get(url, {
+                    headers: {"Authorization": $.cookie("sessionId")},
+                    params: {"caseId": caseId}
+                }).then(response => {
+                    let result = response.data;
+                    this.caseEditVO = result.data
+                    console.log("是否拿出来caseEditVO.requestParams---》"+this.caseEditVO.testRules)
+                    if (this.caseEditVO.status == 1 && this.caseEditVO.message == "未登录") {
+                        location.href = lemon.config.global.admin + "/html/login.html";
+                    }
+                    let requestParams = this.caseEditVO.requestParams;
+                    for (let i = 0; i < requestParams.length; i++) {
+                        let param = requestParams[i];
+                        //esc键下的点，es6才有的语法进行字符串拼接
+                        let str =
+                            `<div class="line-com line-interrun">
+								<input name="requestParams[${i}].valueId" value="${param.valueId}" type="hidden">
+									<input name="requestParams[${i}].id" value="${param.id}" type="hidden">
+									<input name="requestParams[${i}].type" value="${param.type}" type="hidden">
+									<div class="ipt-interrun f-l" style="width:15%">
+										<div class="ltipt-interrun">
+											<input class=" disabled" readonly="readonly" value="${param.name == null ? 'json' : param.name}" name="requestParams[${i}].name" type="text">
+										</div>
+										<div class="equal-interrun f-r">=</div>
+											<input class="disabled f-r" disabled="" checked="" type="checkbox">
+										</div>
+										<div class="ipt-interrun f-l" style="width:85%">
+											 <input placeholder="参数值" style="width:100%" name="requestParams[${i}].value" value="${param.exampleData}" type="text">
+										<div class="edit-interrun f-l"></div>
+									</div>
+								</div>`;
+                        if (param.type == 1) {
+                            //动态操作dom节点
+                            $("#queryDiv").append(str);
+                        } else if (param.type == 2 || param.type == 4) {
+                            $("#bodyDiv").append(str);
+                        } else if (param.type == 3) {
+                            $("#headDiv").append(str);
+                        }
+                    }
+                });
+            }
+        },
+        created() {
+            this.host = sessionStorage.getItem("host");
+            this.showCase();
+        }
+
+    })
+</script>
+<script type="text/javascript" src="/lemon/js/caseEdit.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="indexHtml" ang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>后台管理</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="stylesheet" type="text/css" href="/lemon/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+    
+</head>
+<body class="indexBody">
+<div class="con-wripper"> 
+ <div class="con-top clearfix">
+        <div class="left-top f-l">
+            <div class="logo-top f-l">
+            </div>
+            <div class="modname-top f-l">API RUNNER</div>
+        </div>
+        <div class="right-top f-r">
+            <div class="srch-top f-l">
+                <input type="text"  class="ipt-top" placeholder="搜索分组/项目/接口" />
+            </div>
+            <div class="handle-top f-l">
+                <i class="icon-top icon-collect"></i>
+                <i class="icon-top icon-plus"></i>
+                <i class="icon-top icon-doubt"></i>
+            </div>
+           <div class="ctr-top f-l">
+                <div class="btn_stretch">
+                    <a class="header-top"></a>
+                    <i class="icon-arrow"></i>
+                </div>
+                <ul class="ctrlist-top">
+                    <li class="pctr-top">
+                        <!-- <a href="javascript:personalcenter()">个人中心</a> -->
+                        <a href="userSet.html">个人中心</a>
+                    </li>
+                    <li class="quit-top">
+                        <a href="Javascript:logout()">退出</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>    <div class="main-interlist com-module clearfix mr24">
+        <div class="item_tab">
+            <a class="tab_span" href="userSet.html">个人中心</a>
+        </div>
+        <div class="right-interlist item_main">
+            <div class="desc-interlist">
+                
+                <h3 class="item_title">我的信息</h3>
+                <div id="box">
+                    <table border="1" cellpadding='0' cellspacing='0'>
+                        <tr>
+                            <td>序号</td>
+                            <td>姓名</td>
+                            <td>密码</td>
+                            <td>注册时间</td>
+                        </tr>
+                        <tr v-for="v in userlist">
+                            <td>{{v.id}}</td>
+                            <td>{{v.username}}</td>
+                            <td>{{v.password}}</td>
+                            <td>{{v.regtime}}</td>
+                        </tr>
+                        
+                    </table>
+                </div>
+                <div class="item_body">
+                	 <a class="item_single" href="index.html">
+                       <span class="item_ic"></span>
+                       <span class="item_font">前程贷{ret.static}</span>
+                   	 </a>
+                	 <a class="item_single" href="index.html">
+                       <span class="item_ic"></span>
+                       <span class="item_font">bb</span>
+                   	 </a>
+                	 <a class="item_single" href="index.html">
+                       <span class="item_ic"></span>
+                       <span class="item_font">q</span>
+                   	 </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/lemon/js/alert.js"></script>
+<script type="text/javascript" src="/lemon/js/base.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery-validate.js"></script>
+<script type="text/javascript" src="/lemon/js/projectList.js"></script>
+<script type="text/javascript" src="/lemon/js/common.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+
+<script type="text/javascript" src="/lemon/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/lemon/js/vue.min.js"></script>
+<script type="text/javascript" src="/lemon/js/axios.min.js"></script>
+<script>
+    var vue = new Vue({
+                el:"#app",//控制div最大的元素
+                url: lemon.config.global.admin + "/user/self",
+                data:{
+                    name:"笔记本电脑",
+                    url:"images/collect1.png",
+                    show:true,
+                    userlist:[]
+                },
+                methods: {
+                    f:function(){
+                        console.log("blur验证用户是否存在")
+                    }
+                },
+                created () {
+                    console.log(this.url);//this代表当前vue实例本身，作用范围
+                },
+                mounted () {
+                    //onload页面挂载完毕
+                    //ajax异步get请求
+                    //then是响应回来调用的回调函数
+                    // axios.get('http://193.112.9.183:7300/mock/5e099e02eb076d141d702067/api/user/list')
+                    //     .then(function (response) {
+                    //         this.userlist = response.data.data.list;//服务器的响应json
+                    //     });
+                    axios.get(url)
+                         .then(response=>{
+                             this.userlist = response.data.data.list;//服务器的响应json
+                             console.log(this.userlist);
+                         });
+                }
+    
+            })
+            
+    $(function(){
+        //高度计算
+        function calcHeight() {
+            var thispage = document.body.clientHeight
+            var itemmain = thispage - 190;
+            $(".item_main").height(itemmain);
+        }
+        calcHeight();
+        window.onresize=function(){
+            calcHeight();
+        }
+    })
+    
+    function personalcenter(){
+        
+        let sessionId = $.cookie("sessionId");
+        //异步请求后端
+        $.ajax({
+            headers: {"Authorization":sessionId},
+            url: lemon.config.global.admin + "/user/self",
+            type:"GET",
+            success:function(ret){
+                if(ret.status==1&&ret.message=="查询个人信息成功"){
+                    //location.href=lemon.config.global.admin + "/user/login.html";
+                    alert(ret.message);
+                    location.href=lemon.config.global.qian + "/html/personalcenter.html";
+                }
+                
+            }
+        })
+        
+        
+    }
+
+    function logout(){
+        //异步请求后端
+        let sessionId = $.cookie("sessionId");
+
+        $.ajax({
+            headers: {"Authorization":sessionId},
+            url: lemon.config.global.admin + "/user/logout",
+            type:"GET",
+            success:function(ret){
+                if(ret.status==1&&ret.message=="账号未登录"){
+                    //location.href=lemon.config.global.admin + "/user/login.html";
+                    location.href=lemon.config.global.qian + "/html/login.html";
+                }
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BootStrap练习</title>
+  <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+  <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script src="bootstrap-3.3.7-dist/jquery-3.4.1.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="https://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+  <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+  <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+  <script src="https://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+  <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+  <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+  <script src="https://how2j.cn/study/js/jquery/2.0.0/jquery.min.js"></script>
+  <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+  <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="//cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="2.css">
+</head>
+
+<body>
+  <div id="container">
+    <h2>HELLO 欢迎学习bootstrap框架</h2>
+  </div>
+
+  <div id="container" class="header">
+    <div class="left"></div>
+    <div class="right">
+      <ul>
+        <li><a href="#home">首页</a></li>
+        <li><a href="#course">精品课程</a></li>
+        <li><a href="#lecturer">金牌讲师</a></li>
+        <li><a href="#consult">柠檬咨询</a></li>
+        <li><a href="#community">柠檬社区</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="sff">
+    
+  <div id="myCarousel" class="carousel slide">
+    <!-- 轮播（Carousel）指标 -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <!-- 轮播（Carousel）项目 -->
+    <div class="carousel-inner" v-for="(users,index) in userinfos">
+      <div class="item active">
+        <h2>{{users.name}}</h2>
+        <!-- <img src="/images/slide1.png" alt="{{users.name}}"> -->
+      </div>
+      <div class="item">
+        <h2>{{users.name}}</h2>
+        <!-- <img src="images/slide2.png" alt="Second slide"> -->
+      </div>
+      <div class="item">
+        <h2>{{users.name}}</h2>
+        <!-- <img src="images/slide3.png" alt="Third slide"> -->
+      </div>
+    </div>
+    <!-- 轮播（Carousel）导航 -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+  <div class="sff">
+    <table class="table table-hover">
+      <caption>
+        <button type="button" class="btn btn-success">添加</button>
+        <button type="button" class="btn btn-warning">修改</button>
+        <button type="button" class="btn btn-danger">删除</button>
+      </caption>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="inlineCheckbox1" value="option1"></th>
+          <th>序号</th>
+          <th>名称</th>
+          <th>城市</th>
+          <th>邮编</th>
+          <th>详细地址</th>
+        </tr>
+      </thead>
+      <tbody valign="middle">
+        <tr v-for="(users,index) in userinfos">
+          <td><input type="checkbox" id="inlineCheckbox2" value="option2"></td>
+          <td>{{index+1}}</td>
+          <td>{{users.name}}</td>
+          <td>{{users.city}}</td>
+          <td>{{users.number}}</td>
+          <td>{{users.address}}</td>
+        </tr>
+        <!-- <tr v-for="users in userinfos.userinfo">
+          <td><input type="checkbox" id="inlineCheckbox3" value="option3"></td>
+          <td>{{users.name}}</td>
+          <td>{{users.city}}</td>
+          <td>{{users.number}}</td>
+          <td>{{users.address}}</td>
+        </tr>
+        <tr v-for="users in userinfos.userinfo">
+          <td><input type="checkbox" id="inlineCheckbox4" value="option4"></td>
+          <td>{{users.name}}</td>
+          <td>{{users.city}}</td>
+          <td>{{users.number}}</td>
+          <td>{{users.address}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+  <script src="/js/vue.js"></script>
+  <script src="/js/axios.min.js"></script>
+  <script>
+    var myvue = new Vue({
+      el: "#sff",
+      data: {
+        userinfos: []
+      },
+      methods: {
+
+      },
+      created() {
+        let url = "http://lemon.mock.com:7300/mock/5eae30f3fafdb004d581df95/example/futureloan/mvc/api/member/userinfo";
+        axios.get(url, {
+
+        }).then(response => {
+          let result = response.data;
+          if (result.status == 1 && result.data != null) {
+            // this.userinfos = result;
+            this.userinfos = result.data.userinfo
+            // console.log(result.message);
+            // console.log(result.data.userinfo);
+            // for (users in result.data.userinfo) {
+            //   alert(result.data.userinfo[users].name)
+            // }
+          } else {
+            // location.href=lemon.config.global.htmlUrl+"/html/login.html";
+          }
+        })
+      }
+
+    })
+  </script>
+</body>
+
+</html>

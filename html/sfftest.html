@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>to do list</title>
+                <script src="/lemon/js/vue.js"></script>
+                <style>
+                *{
+                    margin: 0;
+                    padding: 0
+                }  
+                li{
+                    list-style: none;
+                    margin-top:10px;  
+                    border: 1px solid #eee;  
+                    border-radius: 4px;
+                    
+                }
+                #do{
+                    width:400px;
+                    border: 2px solid #ccc;
+                    margin: 0 auto;  
+                    padding: 5px 20px;
+                }
+                .red{
+                    background: rgb(233, 232, 159);
+                }
+                .green{
+                    background: rgb(108, 170, 156);
+                }
+                span{
+                    float: left;
+                }
+
+                </style>
+            </head>
+            <body>
+                <div id="do">
+                    <input type="text" v-model='string'>
+                    <button @click='add()'>添加任务</button>
+                    <hr>
+                    <ul>
+                        <li v-for='(item,index) of list'
+                        :class="item.state?'green':'red'"
+                        >
+                            <span>{{index+1}}、</span>
+                            <p>{{item.msg}}</p>
+                            <div v-if='item.state'>已完成</div>
+                            <div v-else>
+                                <button @click='finish(index)'>去完成</button>
+                            </div>
+                            <button @click='del(index)'>删除任务</button>
+                        </li>
+                    </ul>
+                </div>
+            </body>
+            </html>
+
+            <script>
+            // 实现todolist 全部  未完成 已完成
+            new Vue({
+                el:"#do",
+                data:{
+                    string:'' ,
+                    list:[{state:true,msg:"今天中午12:20吃饭"},
+                        {state:false,msg:"晚上11点之前睡觉"},
+                        {state:false,msg:"周末看一次电影"}]
+                },
+                methods:{
+                    add(){
+                        if(this.string==''){
+                            alert('添加任务不能为空')
+                        }
+                        else{
+                            this.list.push({state:false,msg:this.string})  
+                        }
+                        },
+                    del(index){
+                        this.list.splice(index,1)
+                    },
+                    finish(index){
+                        this.list[index].state=true
+                    }
+                }
+            })
+
+        </script>

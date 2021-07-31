@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="indexHtml" ang="zh-CN">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>后台管理</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="stylesheet" type="text/css" href="/lemon/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+    <link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+</head>
+
+<body class="indexBody">
+<input type="hidden" name="projectId" value="4"/>
+<div class="con-wripper">
+    <div class="con-top clearfix">
+        <div class="left-top f-l">
+            <div class="logo-top f-l">
+            </div>
+            <div class="modname-top f-l">API RUNNER</div>
+        </div>
+        <div class="right-top f-r">
+            <div class="srch-top f-l">
+                <input type="text" class="ipt-top" placeholder="搜索分组/项目/接口"/>
+            </div>
+            <div class="handle-top f-l">
+                <i class="icon-top icon-collect"></i>
+                <i class="icon-top icon-plus"></i>
+                <i class="icon-top icon-doubt"></i>
+            </div>
+            <div class="ctr-top f-l">
+                <div class="btn_stretch">
+                    <a class="header-top"></a>
+                    <i class="icon-arrow"></i>
+                </div>
+                <ul class="ctrlist-top">
+                    <li class="pctr-top">
+                        <a href="userSet.html">个人中心</a>
+                    </li>
+                    <li class="quit-top">
+                        <a href="javascript:logout()">退出</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="nav-interlist">
+        <ul class="clearfix">
+            <li class="active"><a href="#">接口</a></li>
+            <li><a href="projectSet.html">项目设置</a></li>
+        </ul>
+    </div>
+    <div class="main-interlist com-module clearfix">
+        <div class="left-interlist f-l">
+            <div class="tab-interlist">
+                <div class="tabtype-interlist">
+                    <ul class="clearfix">
+                        <li><a href="index.html">接口列表</a></li>
+                        <li class="active"><a href="index2.html">测试集合</a></li>
+                    </ul>
+                </div>
+                <div class="srchbox-interlist clearfix">
+                    <input type="text" placeholder="搜索用例" class="input-com f-l">
+                    <a href="javascript:;" class="btn-addfl btn-com f-r" id="addjh">添加集合</a>
+                </div>
+            </div>
+            <div class="list-interlist" id="listInter">
+                <ul class="type_menu">
+                    <li v-for="suite in info">
+                        <div class="menu-interlist">
+                            <a href="/lemon/html/caseList.html" target="rightIframe" @click="goTo(suite.id)">
+                                <i class="icon-file"></i>
+                                <span>{{suite.name}}</span>
+                                <div class="hanmenu-interlist active" >
+<!--                                    <i class="icon-add"></i>-->
+                                    <i class="icon-edit" @click="saveSuite(suite.id)"></i>
+                                    <i class="icon-delete" @click="deleteSuite(suite.id)"></i>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- 默认展开第一个套件 -->
+                        <ul class="tmenu-interlist active">
+                            <!-- 加载此套件下的所有测试用例 -->
+                            <li class="" v-for="caseVo in suite.cases">
+                                <a href="/lemon/html/caseEdit.html" target="rightIframe" @click="goTo3(caseVo.id)">
+                                    {{caseVo.name}}
+                                    <div class="hantmenu-interlist active">
+<!--                                        <i class="icon-edit" @click="copyCases(caseVo.id)"></i>-->
+                                        <i class="icon-delete" @click="delCases(caseVo.id)"></i>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <iframe class="rightIframe f-l" name="rightIframe" src="/lemon/html/caseList.html" scrolling="yes"
+                style="height: 297px;" frameborder="0"></iframe>
+        <!--
+                        <iframe class="rightIframe f-l" name="rightIframe" src="/lemon/html/caseList.html" onload="loadFrame(this);"
+                        scrolling="yes" frameborder="0"></iframe>
+        -->
+    </div>
+    <!-- 添加集合弹窗 -->
+    <form id="addSuite">
+        <div class="dialog-addinter">
+            <div class="line-addinter form_control clearfix">
+                <label><span>*</span>集合名称：</label>
+                <input type="text" placeholder="分类名称" class="required" data-valid="isNonEmpty" data-error="内容不能为空"
+                       name="name">
+                <span class="valid_message"></span>
+            </div>
+            <div class="line-addinter form_control clearfix describe">
+                <label>描述：</label>
+                <textarea type="text" class="path-addinter" placeholder="描述" name="description"></textarea>
+            </div>
+        </div>
+    </form>
+    <!-- 编辑分类窗口 -->
+    <form id="saveSuite" v-for="apiclassification111 in info">
+        <div class="dialog-addinter">
+            <div class="line-addinter form_control clearfix">
+                <label><span>*</span>集合名称：</label>
+                <input placeholder="集合名称" class="required" data-valid="isNonEmpty" data-error="内容不能为空" name="name"
+                       type="text">
+                <span class="valid_message"></span>
+            </div>
+            <div class="line-addinter form_control clearfix describe">
+                <label>描述：</label>
+                <textarea type="text" class="path-addinter" placeholder="描述" name="description"></textarea>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/lemon/js/alert.js"></script>
+<script type="text/javascript" src="/lemon/js/jquery-validate.js"></script>
+<script type="text/javascript" src="/lemon/js/common.js"></script>
+
+
+<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+<script src="/lemon/js/vue.js"></script>
+<script src="/lemon/js/axios.min.js"></script>
+<script>
+    var myvue = new Vue({
+        el: "#listInter",
+        data: {
+            info: []
+            // apiClassificationInfo:null
+        },
+        methods: {
+            goAll() {
+                sessionStorage.removeItem("suiteId");
+            },
+            goTo(suiteId) {
+                sessionStorage.setItem("suiteId", suiteId);
+            },
+            goTo2(apiId) {
+                sessionStorage.setItem("apiId", apiId);
+            },
+            goTo3(caseId) {
+                sessionStorage.setItem("caseId", caseId);
+            },
+            //删除套件
+            deleteSuite(id) {
+                let url = lemon.config.global.admin + "/suite/deleteSuite?suiteId=" + id;
+                let sessionId = $.cookie("sessionId");
+                if (confirm("真的要删除吗？")) {
+                    axios.get(url, {
+                        headers: { "Authorization": sessionId },
+                    }).then(response => {
+                        let result = response.data;
+                        if (result.status == 1 && result.message == "删除成功") {
+                            console.log(result.data);
+                            alert(result.message);
+                            window.location.reload();
+                        } else {
+                            location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                            alert("删除完成异常");
+                        }
+                    })
+                } else {
+                    alert("删除错误抛出")
+                }
+
+            },
+
+            //更新套件
+            saveSuite(id) {
+                //先要查询，模块的详情；然后在进行修改
+                let projectId = sessionStorage.getItem("projectId");
+                //套件ID信息查询
+                let urlapi = lemon.config.global.admin + "/suite/getSuiteById?suiteId=" + id;
+                let sessionId = $.cookie("sessionId");
+                //查询套件接口数据
+                axios.get(urlapi, {
+                    headers: { "Authorization": sessionId },
+                    // params:{
+                    // "id":id
+                    // }
+                }).then(response => {
+                    let result = response.data;
+                    if (result.status == 1 && result.data != null) {
+                        //在jqueryAlert执行前获取并回填到框内
+                        $('#saveSuite .required').val(result.data.name);
+                        $('#saveSuite .path-addinter').val(result.data.description);
+                        // this.apiClassificationInfo = result.data;
+                        // window.location.reload();
+                        var dialog = jqueryAlert({
+                            'style': 'pc',
+                            'title': '编辑分类',
+                            'content': $('#saveSuite'), // $("#alert-blockquote")
+                            'modal': true,
+                            'contentTextAlign': 'left',
+                            'width': '520px',
+                            'animateType': 'linear',
+                            'end': function () {
+                                console.log(1111);
+                            },
+                            'buttons': {
+                                '取消': function () {
+                                    dialog.close();
+                                },
+                                '提交': function () {
+                                    var ifViladate = true;
+                                    var $form = $('.pcAlert').last().find(
+                                        '#saveSuite');
+                                    ifViladate = $form.validate('submitValidate');
+                                    if (!ifViladate)
+                                        return;
+                                    $.ajax({
+                                        url: lemon.config.global.admin
+                                            + "/suite/saveSuite",
+                                        headers: { "Authorization": $.cookie("sessionId") },
+                                        data: $form.serialize() + '&id=' + id,
+                                        type: 'post',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (ret) {
+                                            if (ret.status == "1") {
+                                                dialog.close();
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        })
+                    } else {
+                        location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                    }
+                })
+
+            },
+
+            //删除用例
+            delCases(id) {
+                let url = lemon.config.global.admin + "/cases/delCases?caseId=" + id;
+                let sessionId = $.cookie("sessionId");
+                if (confirm("真的要删除吗？")) {
+                    axios.get(url, {
+                        headers: { "Authorization": sessionId },
+                    }).then(response => {
+                        let result = response.data;
+                        if (result.status == 1 && result.message == "删除用例成功") {
+                            console.log(result.data);
+                            alert(result.message);
+                            window.location.reload();
+                        } else {
+                            location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                            alert("删除完成异常");
+                        }
+                    })
+                } else {
+                    alert("删除错误抛出")
+                }
+
+            },
+
+            //复制用例
+            copyCases(id) {
+                //先要查询，模块的详情；然后在进行修改
+                let projectId = sessionStorage.getItem("projectId");
+                //套件ID信息查询
+                let urlapi = lemon.config.global.admin + "/suite/getSuiteById?suiteId=" + id;
+                let sessionId = $.cookie("sessionId");
+                //查询套件接口数据
+                axios.pos(urlapi, {
+                    headers: { "Authorization": sessionId },
+                    // params:{
+                    // "id":id
+                    // }
+                }).then(response => {
+                    let result = response.data;
+                    if (result.status == 1 && result.data != null) {
+                        //在jqueryAlert执行前获取并回填到框内
+                        $('#saveSuite .required').val(result.data.name);
+                        $('#saveSuite .path-addinter').val(result.data.description);
+                        // this.apiClassificationInfo = result.data;
+                        // window.location.reload();
+                        var dialog = jqueryAlert({
+                            'style': 'pc',
+                            'title': '编辑分类',
+                            'content': $('#saveSuite'), // $("#alert-blockquote")
+                            'modal': true,
+                            'contentTextAlign': 'left',
+                            'width': '520px',
+                            'animateType': 'linear',
+                            'end': function () {
+                                console.log(1111);
+                            },
+                            'buttons': {
+                                '取消': function () {
+                                    dialog.close();
+                                },
+                                '提交': function () {
+                                    var ifViladate = true;
+                                    var $form = $('.pcAlert').last().find(
+                                        '#saveSuite');
+                                    ifViladate = $form.validate('submitValidate');
+                                    if (!ifViladate)
+                                        return;
+                                    $.ajax({
+                                        url: lemon.config.global.admin
+                                            + "/suite/saveSuite",
+                                        headers: { "Authorization": $.cookie("sessionId") },
+                                        data: $form.serialize() + '&id=' + id,
+                                        type: 'post',
+                                        dataType: 'json',
+                                        async: false,
+                                        success: function (ret) {
+                                            if (ret.status == "1") {
+                                                dialog.close();
+                                                window.location.reload();
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        })
+                    } else {
+                        location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                    }
+                })
+
+            },
+
+        },
+        created() {
+            let projectId = sessionStorage.getItem("projectId");
+            let url = lemon.config.global.admin + "/apiClassification/toIndex";
+            let sessionId = $.cookie("sessionId");
+            axios.get(url, {
+                headers: {"Authorization": sessionId},
+                params: {"projectId": projectId, "tab": 2}
+            }).then(response => {
+                let result = response.data;
+                if (result.status == 1 && result.data != null) {
+                    // console.log(result.data);
+                    this.info = result.data;
+                } else {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            })
+        }
+
+    })
+</script>
+<script type="text/javascript" src="/lemon/js/index.js"></script>
+<script type="text/javascript" src="/lemon/js/base.js"></script>
+<script>
+    function logout() {
+        let sessionId = $.cookie("sessionId");
+        $.ajax({
+            headers: {"Authorization": sessionId},
+            url: lemon.config.global.admin + "/user/logout",
+            type: "GET",
+            success: function (ret) {
+                if (ret.status == 1 && ret.message == "账号未登录") {
+                    location.href = lemon.config.global.htmlUrl + "/html/login.html";
+                }
+            }
+        })
+    }
+</script>
+</body>
+
+</html>

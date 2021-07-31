@@ -1,0 +1,35 @@
+
+
+ul{
+    /*去除黑点*/
+    list-style-type: none;
+}
+li{
+    float: left;
+}
+li a{
+    width: 60px;
+    height: 10px;
+    /*外边框间距*/
+    margin-left: 9px;
+    text-align: center;
+    line-height: 1px;
+    color: white;
+    font-size: 10px;
+    /*超链接样式*/
+    display: block;
+    text-align: center;
+    padding: 10px 12px;
+    text-decoration: none;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}

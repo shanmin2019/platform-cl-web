@@ -1,0 +1,241 @@
+<html ang="zh-CN">
+
+<head></head>
+
+<body>
+	 <input name="apiId" value="4" type="hidden">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>接口预览</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta http-equiv="Cache-Control" content="no-transform">
+	<link rel="stylesheet" href="/lemon/css/index.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="/lemon/css/pagination.css">
+	<link rel="stylesheet" type="text/css" href="/lemon/css/alert.css">
+
+	<div class="right-interlist right-interpre">
+		<div class="nav-interpre">
+			<ul>
+				<li><a href="apiView.html">预览</a></li>
+				<li class="active"><a href="#">编辑</a></li>
+				<li><a href="apiRun.html">运行</a></li>
+			</ul>
+		</div>
+		<form name="apiEditForm">
+
+			<div class="del-interpre del-interedit">
+				<input name="id" :value="api.id" type="hidden">
+
+				<div class="basicinfo-interpre basicset-interedit">
+					<div class="comtit-interpre notop">基本设置</div>
+					<div class="setlist-interedit">
+						<div class="line-interedit line-com">
+							<label><span>*</span>接口名称：</label>
+							<div class="ipt-interedit">
+								<input name="name" :value="api.name" placeholder="接口名称" type="text">
+							</div>
+						</div>
+						<div class="line-interedit line-com">
+							<label><span>*</span>选择分类：</label>
+							<div class="ipt-interedit">
+								<!-- 注意踩坑，这里的name要与pojo的属性值一致才可以 -->
+								<select name="apiClassificationId" id="aaa">
+									<!-- selected="true"默认被选择获取到的值，若没有则默认第一个被选中 -->
+									<option :value="apiClassification.id"
+										v-for="apiClassification in apiClassifications"
+										:selected="api.apiClassificationId==apiClassification.id">
+										{{apiClassification.name}}</option>
+									 <option value="cs2">测试1</option>
+										<option value="cs3">测试2</option>
+								</select>
+							</div>
+						</div>
+						<div class="line-interedit line-com">
+							<label><span>*</span>请求方法<i class="icon-doubt"></i>：</label>
+							<div class="ipt-interedit">
+								<select name="method" id="ccc" class="reqtype-interedit" style="width:15%;margin-right:0;">
+									<option value="get" :selected="api.method=='get'">GET</option>
+									<option value="post" :selected="api.method=='post'">POST</option>
+									<option value="put" :selected="api.method=='put'">PUT</option>
+									<option value="delete" :selected="api.method=='delete'">DELETE</option>
+									<option value="head" :selected="api.method=='head'">HEAD</option>
+									<option value="option" :selected="api.method=='option'">OPTION</option>
+									<option value="patch" :selected="api.method=='patch'">PATCH</option>
+								</select>
+							</div>
+						</div>
+						<div class="line-interedit line-com">
+							<label><span>*</span>接口地址<i class="icon-doubt"></i>：</label>
+							<div class="ipt-interedit">
+								<input placeholder="/path" name="url" :value="api.url" type="text">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basicinfo-interpre reqparamsset-interedit">
+					<div class="comtit-interpre">请求参数设置</div>
+					<div class="reqplist-interedit">
+						<div class="reqpnav-interedit comnav-interedit">
+							<ul class="clearfix inline-block">
+								<li class="active"><a href="javascript:void(0);">Query</a></li>
+								<li><a href="javascript:void(0);">Body</a></li>
+								<li class="header"><a href="javascript:void(0);">Headers</a></li>
+							</ul>
+						</div>
+						<div class="reqpdel-interedit comdel-interedit clearfix">
+							<div class="reqpcom-interredit active" id="reqpQuery">
+								<div class="reqpline-interedit linebox-interedit">
+									<a href="javascript:void(0)" class="btn-com">添加Query参数</a>
+								</div>
+							</div>
+							<div class="reqpcom-interredit" id="reqpBody">
+								<div class="radiobox-interedit">
+									<input value="form" type="radio" :checked="jsonParam=='{}'" name="pt">form
+									<input value="raw" type="radio" :checked="jsonParam!='{}'" name="pt">raw
+								</div>
+								<div class="reqpline-interedit linebox-interedit">
+									<a href="javascript:void(0);" class="btn-com" v-show="jsonParam=='{}'">添加form参数</a>
+								</div>
+							</div>
+							<div class="reqpcom-interredit" id="reqpHeaders">
+								<div class="reqpline-interedit linebox-interedit">
+									<a href="javascript:void(0)" class="btn-com">添加Header参数</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="basicinfo-interpre reqparamsset-interedit">
+					<div class="comtit-interpre">备 注</div>
+					<div class="reqplist-interedit">
+						<textarea name="description" id="" class="remark-interedit"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="comfirm-interedit">
+				<a href="javascript:void(0)" class="btn-com">保存</a>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="/lemon/js/jquery-1.11.3.js"></script>
+	<script type="text/javascript" src="/lemon/js/jquery.pagination.js"></script>
+	<script type="text/javascript" src="/lemon/js/alert.js"></script>
+	<script type="text/javascript" src="/lemon/js/base.js"></script>
+
+	<script type="text/javascript" src="/lemon/js/common.js"></script>
+
+	<script type="text/javascript" src="/lemon/js/jquery.cookie.js" charset="UTF-8"></script>
+	<script src="/lemon/js/vue.js"></script>
+	<script src="/lemon/js/axios.min.js"></script>
+	<script>
+		var myvue = new Vue({
+			el: ".del-interpre",
+			data: {
+				apiClassifications: [],
+				api: {},
+				//标识变量，用来区分form单选框type=2或type=4，另外还为了呈现json或其他数据
+				jsonParam: "{}",
+			},
+			methods: {
+/*
+				showClassification() {
+					var projectId = sessionStorage.getItem("projectId");
+					var url = lemon.config.global.admin + "/apiClassification/findAll";
+					let sessionId = $.cookie("sessionId");
+					console.log("showClassification我执行了");
+					//下拉加载分类数据
+					axios.post(url, {
+						headers: { "Authorization": sessionId },
+						data: { "projectId": projectId }
+					}).then(response => {
+						let result = response.data;
+						this.apiClassifications = result.data
+					});
+				},
+*/
+				showClassification() {
+					let projectId = sessionStorage.getItem("projectId");
+					let url = lemon.config.global.admin + "/apiClassification/findAll/"+projectId;
+					let sessionId = $.cookie("sessionId");
+					axios.get(url, {
+							headers: {"Authorization": sessionId},
+						}).then(response => {
+							let result = response.data;
+							this.apiClassifications = result.data
+						})
+
+						},
+
+				showApi() {
+					var apiId = sessionStorage.getItem("apiId");
+					var url = lemon.config.global.admin + "/api/findApi";
+					let sessionId = $.cookie("sessionId");
+
+					console.log("showApi执行了")
+					//下拉加载分类数据
+					axios.get(url, {
+						headers: { "Authorization":  sessionId},
+						params: { "apiId": apiId }
+					}).then(response => {
+						let result = response.data;
+						this.api = result.data
+						if (this.api.status == 1 && this.api.message == "未登录") {
+							location.href = lemon.config.global.htmlUrl + "/html/login.html";
+						}
+						let requestParams = this.api.requestParams;
+						for (let i = 0; i < requestParams.length; i++) {
+							let param = requestParams[i];
+							//esc键下的点，es6才有的语法进行字符串拼接
+							let str = `<div class="line-interedit line-com">
+										<input name="requestParams[${i}].id" value="${param.id}" type="hidden">
+										<input name="requestParams[${i}].apiId" value="${param.apiId}" type="hidden">
+										<input name="requestParams[${i}].type" value="${param.type}" type="hidden">
+										<input placeholder="name" name="requestParams[${i}].name" value="${param.name}"
+											style="width:18%" type="text">
+										<select name="requestParams[${i}].paramType" id="" style="width:12%">
+											<option value="string" selected="${param.paramType == 'string'}">string</option>
+											<option value="int" ${param.paramType == 'int' ? 'selected' : ''}>int</option>
+										</select>
+										<textarea name="requestParams[${i}].exampleData" id="" value="${param.exampleData}" placeholder="参数示例"
+											style="width:20%">${param.exampleData}</textarea>
+										<textarea name="requestParams[${i}].description" id="" value="${param.description}" placeholder="备注"
+											style="width:25%">${param.description}</textarea>
+										<i class="icon icon-delete f-l"></i>
+									</div>`;
+							if (param.type == 1) {
+								//动态操作dom节点
+								$("#reqpQuery .linebox-interedit").append(str);
+							} else if (param.type == 2) {
+								$("#reqpBody .linebox-interedit").append(str);
+							} else if (param.type == 3) {
+								$("#reqpHeaders .linebox-interedit").append(str);
+							} else {
+								//当type==4时
+								this.jsonParam = param.exampleData;
+								var toAddHtml = "<div class='basicinfo-interpre reqparamsset-interedit'>"
+									+ "<div class='reqplist-interedit'>"
+									+ "<textarea name='bodyRawParams[0].exampleData' id='' class='remark-interedit'>" + this.jsonParam + "</textarea>"
+									+ "<input name='bodyRawParams[0].type' value='4' type='hidden'/>"
+									+ "<input name='bodyRawParams[0].apiId' value='" + apiId + "' type='hidden'/>"
+									+ "</div>"
+									+ "</div>";
+
+								$("#reqpBody .linebox-interedit").append(toAddHtml);
+							}
+						}
+					});
+				}
+			},
+			created() {
+				this.showClassification();
+				console.log("我是真的执行完了showClassification")
+				this.showApi();
+				console.log("我是真的执行完了showApi")
+
+			}
+		})
+	</script>
+	<script type="text/javascript" src="/lemon/js/apiEdit.js"></script>
+</body>
+
+</html>
